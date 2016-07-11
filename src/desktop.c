@@ -192,12 +192,14 @@ create_desktop (DesktopMode mode)
 {
   GtkWidget *window, *scrolled, *viewport;
   GdkScreen *screen;
+  GdkDisplay *display;
   int width, height;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_name (window, "TakuWindow");
   gtk_window_set_title (GTK_WINDOW (window), _("Desktop"));
 
+  display = gtk_widget_get_display (window);
   screen = gtk_widget_get_screen (window);
 
   /* Main VBox */
@@ -292,6 +294,9 @@ create_desktop (DesktopMode mode)
   g_signal_connect (menu, "item-removed", G_CALLBACK (on_item_removed), NULL);
 
   load_items (menu);
+
+  /* init mouse to 0,0 position */
+  gdk_display_warp_pointer(display, screen, 0, 0);
 
   return window;
 }
